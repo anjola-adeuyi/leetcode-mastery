@@ -30,6 +30,7 @@ grid = [
     [0,0,0,0,0,0,0,1,1,0,0,0,0]
 ]
 print(Solution.maxAreaOfIsland(grid))  # Output: 6
+print(grid)
 
 # Time Complexity
 # The time complexity of the maxAreaOfIsland function is O(ROWS * COLS), where ROWS is the number of rows in the grid and COLS is the number of columns.
@@ -50,3 +51,44 @@ print(Solution.maxAreaOfIsland(grid))  # Output: 6
 # (water). The function uses Depth-First Search (DFS) to explore each island and calculate its area, updating the maximum area found during the traversal.
 # The provided example grid contains several islands, and the function correctly identifies the largest one with an
 # area of 6.
+
+
+def maxAreaIter(grid):
+    if not grid or not grid[0]: return 0
+    R, C = len(grid), len(grid[0])
+    visited = set()
+    dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+    best = 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == 1 and (r,c) not in visited:
+                area = 0
+                stack = [(r,c)]
+                visited.add((r,c))
+                while stack:
+                    x,y = stack.pop()
+                    area += 1
+                    for dx,dy in dirs:
+                        nx, ny = x+dx, y+dy
+                        if 0 <= nx < R and 0 <= ny < C and grid[nx][ny] == 1 and (nx,ny) not in visited:
+                            visited.add((nx,ny))
+                            stack.append((nx,ny))
+                best = max(best, area)
+    return best
+
+grid = [
+    [0,0,1,0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,0,0,0,1,1,1,0,0,0],
+    [0,1,1,0,1,0,0,0,0,0,0,0,0],
+    [0,1,0,0,1,1,0,0,1,0,1,0,0],
+    [0,1,0,0,1,1,0,0,1,1,1,0,0],
+    [0,0,0,0,0,0,0,0,0,0,1,0,0],
+    [0,0,0,0,0,0,0,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,1,1,0,0,0,0]
+]
+print(maxAreaIter(grid))  # Output: 6
+print(grid)
+
+# The maxAreaIter function implements an iterative DFS approach to find the maximum area of an island in a 2D grid.
+# It uses a stack to explore each island and a set to keep track of visited cells, ensuring that each cell is processed only once.
+# The time and space complexity remain the same as the recursive version: O(ROWS * COLS) for both time and space in the worst case.
